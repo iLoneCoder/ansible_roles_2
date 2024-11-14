@@ -1,0 +1,4 @@
+- name: install nginx, nodejs, git
+  apt:
+    name: "{{ packages_to_install }}"
+    state: latest

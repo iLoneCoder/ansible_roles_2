@@ -1,0 +1,24 @@
+- name: get public ip address
+  shell: "curl -s ifconfig.me"
+  register: public_ip_address
+
+- name: copy nginx conf file
+  copy:
+    dest: "/etc/nginx/sites-available/{{ public_ip_address.stdout }}"
+    content: |
+          server {
+              listen 80;
+              server_name {{ public_ip_address.stdout }};
+
+              location / {
+                  proxy_pass http://localhost:3000;
+              }
+          }
+
+- name: Create symbolic link for the Nginx site
+  file:
+    src: "/etc/nginx/sites-available/{{ public_ip_address.stdout }}"
+    dest: "/etc/nginx/sites-enabled/{{ public_ip_address.stdout }}"
+    state: link
+  notify:
+    - reload nginx

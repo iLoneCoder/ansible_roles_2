@@ -1,0 +1,15 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: update repository index
+    apt:
+      update_cache: yes
+
+  roles:
+    - install_packages
+    - pull_app
+    - set_nginx_proxy
+    - restart_nginx

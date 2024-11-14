@@ -1,0 +1,11 @@
+- name: pull node app from github
+  git:
+    repo: "{{ repo_url }}"
+    dest: "{{ repo_dest }}"
+
+- name: start node app
+  shell: "node app.js"
+  args:
+    chdir: "{{ repo_dest }}"
+  async: 300
+  poll: 0
